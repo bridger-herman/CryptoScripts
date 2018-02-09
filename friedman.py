@@ -4,10 +4,10 @@
 
 import sys
 import math
-from percentages import perc
+from percentages import perc, percs_shifted
 
 MAX_SHIFT = 50
-LARGE_CUTOFF = 0.06
+LARGE_CUTOFF = 0.067
 #  MAX_SHIFT = 2
 
 # Shift a list by one
@@ -36,24 +36,46 @@ def gcd_n(nums):
     else:
         return gcd_n([math.gcd(nums[i], nums[i+1]) for i in range(len(nums) - 1)])
 
+# Probability for each letter in a list (using 0=a .. 25=z)
+def letter_prob(l):
+    return [l.count(n)/len(l) for n in range(26)]
+
+# l1 and l2 (elementwise multiplication)
+def dot(l1, l2):
+    assert len(l1) == len(l2)
+    return sum([l1[i]*l2[i] for i in range(len(l1))])
+
 def decrypt(ciphertext):
     ciphernums = list(map(lambda l: ord(l) - 65, ciphertext))
     friedman_table = [1] # 100% match for 0 shift
+    shifted_lists = [ciphernums]
     shifted = shift_list(ciphernums)
     for shift in range(1, MAX_SHIFT + 1):
+        shifted_lists.append(shifted)
         friedman_table.append(match_percent(ciphernums, shifted))
         shifted = shift_list(shifted)
 
     # Cut off first element because shift 0
     indices = large_indices(friedman_table)[1:]
+    print(indices)
 
     # Key length is (probably) just the greatest common factor of the indices
     # with large percentage matches
     key_length = gcd_n(indices)
-    print(key_length)
 
-    #  probability = [ciphertext.count(chr(n + 65))/len(ciphertext) for n in range(25)]
-    #  print(probability)
+    probs0 = letter_prob(shifted_lists[0][::key_length])
+
+    print(probs0)
+
+    max_prob = 0
+    max_index = 0
+    for i in range(26):
+        assert len(percs_shifted[i]) == len(probs0)
+        d = dot(probs0, percs_shifted[i])
+        if d > max_prob:
+            max_prob = d
+            max_index = i
+    print(max_prob, max_index)
 
 def main():
     if len(sys.argv) != 2:

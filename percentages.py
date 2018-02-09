@@ -1,3 +1,5 @@
+#  https://en.wikipedia.org/wiki/Letter_frequency
+
 percentages = [8.167,
 1.492,
 2.782,
@@ -25,4 +27,16 @@ percentages = [8.167,
 1.974,
 0.074]
 
+
+# Shift a list by one
+def shift_list(l):
+    return [l[-1]] + l[:-1]
+
 perc = [p/100 for p in percentages]
+
+percs_shifted = []
+shifted = perc
+for i in range(26):
+    percs_shifted.append(shifted)
+    shifted = shift_list(shifted)
+
