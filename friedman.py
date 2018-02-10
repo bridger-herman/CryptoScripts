@@ -8,7 +8,6 @@ from percentages import perc, percs_shifted
 
 MAX_SHIFT = 50
 LARGE_CUTOFF = 0.067
-#  MAX_SHIFT = 2
 
 # Shift a list by one
 def shift_list(l):
@@ -82,6 +81,17 @@ def decrypt(ciphertext):
     key = ''.join([chr(ki + 97) for ki in key_shifts])
     print('key:', key)
     print('key:', key_shifts)
+
+    # Decrypt the ciphertext
+    plaintext_nums = []
+    key_index = 0
+    for n in ciphernums:
+        if key_index >= len(key):
+            key_index = 0
+        plaintext_nums.append((n - key_shifts[key_index])%26)
+        key_index += 1
+
+    return ''.join(chr(n + 97) for n in plaintext_nums)
 
 def main():
     if len(sys.argv) != 2:
