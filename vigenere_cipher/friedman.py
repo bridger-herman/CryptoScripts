@@ -2,12 +2,16 @@
 # Bridger Herman
 # February 2018
 
+import os
 import sys
 import math
 from percentages import perc, percs_shifted
 
 MAX_SHIFT = 50
 LARGE_CUTOFF = 0.067
+
+DB = 'debug' in sys.argv
+dbprint = print if DB else lambda *args, **kwargs: None
 
 # Shift a list by one
 def shift_list(l):
@@ -45,7 +49,7 @@ def dot(l1, l2):
     return sum([l1[i]*l2[i] for i in range(len(l1))])
 
 def decrypt(ciphertext):
-    ciphernums = list(map(lambda l: ord(l) - 65, ciphertext))
+    ciphernums = list(map(lambda l: ord(l) - 65, ciphertext.strip().upper()))
     friedman_table = [1] # 100% match for 0 shift
     shifted = shift_list(ciphernums)
     for shift in range(1, MAX_SHIFT + 1):
@@ -54,11 +58,12 @@ def decrypt(ciphertext):
 
     # Cut off first element because shift 0
     indices = large_indices(friedman_table)[1:]
+    dbprint('indices with high matches:', indices)
 
     # Key length is (probably) just the greatest common factor of the indices
     # with large percentage matches
     key_length = gcd_n(indices)
-
+    dbprint('key length:', key_length)
 
     # Find the probabilities associated with each subsampled key (every
     # key_length items, modulo key_length)
@@ -79,8 +84,8 @@ def decrypt(ciphertext):
                 max_index = i
         key_shifts.append(max_index)
     key = ''.join([chr(ki + 97) for ki in key_shifts])
+    dbprint('key integers:', key_shifts)
     print('key:', key)
-    print('key:', key_shifts)
 
     # Decrypt the ciphertext
     plaintext_nums = []
@@ -94,12 +99,14 @@ def decrypt(ciphertext):
     return ''.join(chr(n + 97) for n in plaintext_nums)
 
 def main():
-    if len(sys.argv) != 2:
+    if len(sys.argv) < 2:
         print('bad argument')
         print('vigenere.py ciphertext')
         return
-    print(decrypt(open(sys.argv[1]).read().strip().upper()))
-    #  print(decrypt(sys.argv[1].strip().upper()))
+    if os.path.isfile(sys.argv[1]):
+        print(decrypt(open(sys.argv[1]).read()))
+    else:
+        print(decrypt(sys.argv[1]))
 
 if __name__ == '__main__':
     main()
