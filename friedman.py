@@ -48,34 +48,40 @@ def dot(l1, l2):
 def decrypt(ciphertext):
     ciphernums = list(map(lambda l: ord(l) - 65, ciphertext))
     friedman_table = [1] # 100% match for 0 shift
-    shifted_lists = [ciphernums]
     shifted = shift_list(ciphernums)
     for shift in range(1, MAX_SHIFT + 1):
-        shifted_lists.append(shifted)
         friedman_table.append(match_percent(ciphernums, shifted))
         shifted = shift_list(shifted)
 
     # Cut off first element because shift 0
     indices = large_indices(friedman_table)[1:]
-    print(indices)
 
     # Key length is (probably) just the greatest common factor of the indices
     # with large percentage matches
     key_length = gcd_n(indices)
 
-    probs0 = letter_prob(shifted_lists[0][::key_length])
 
-    print(probs0)
+    # Find the probabilities associated with each subsampled key (every
+    # key_length items, modulo key_length)
+    key_probabilites = [letter_prob(ciphernums[shift::key_length]) for shift
+            in range(key_length)]
 
-    max_prob = 0
-    max_index = 0
-    for i in range(26):
-        assert len(percs_shifted[i]) == len(probs0)
-        d = dot(probs0, percs_shifted[i])
-        if d > max_prob:
-            max_prob = d
-            max_index = i
-    print(max_prob, max_index)
+    # Actually construct the key, based on probability dot product with
+    # Engilsh language letter frequency
+    key_shifts = []
+    for prob in key_probabilites:
+        max_prob = 0
+        max_index = 0
+        for i in range(26):
+            assert len(percs_shifted[i]) == len(prob)
+            d = dot(prob, percs_shifted[i])
+            if d > max_prob:
+                max_prob = d
+                max_index = i
+        key_shifts.append(max_index)
+    key = ''.join([chr(ki + 97) for ki in key_shifts])
+    print('key:', key)
+    print('key:', key_shifts)
 
 def main():
     if len(sys.argv) != 2:
