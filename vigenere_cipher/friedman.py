@@ -6,12 +6,12 @@ import os
 import sys
 import math
 from percentages import perc, percs_shifted
+sys.path.append('..')
+from debug import *
 
 MAX_SHIFT = 50
 LARGE_CUTOFF = 0.067
 
-DB = 'debug' in sys.argv
-dbprint = print if DB else lambda *args, **kwargs: None
 
 # Shift a list by one
 def shift_list(l):

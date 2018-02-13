@@ -16,7 +16,7 @@ def encrypt(plaintext, key):
     for num in plaintext_nums:
         if key_index >= len(key):
             key_index = 0
-        encrypted += chr((num + key_nums[key_index])%26 + 97)
+        encrypted += chr((num + key_nums[key_index])%26 + 65)
         key_index += 1
     return encrypted
 
