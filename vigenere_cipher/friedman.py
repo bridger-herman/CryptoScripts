@@ -56,6 +56,8 @@ def decrypt(ciphertext):
         friedman_table.append(match_percent(ciphernums, shifted))
         shifted = shift_list(shifted)
 
+    dbprint('Friedman table:', [float(format(f, '.3f')) for f in friedman_table])
+
     # Cut off first element because shift 0
     indices = large_indices(friedman_table)[1:]
     dbprint('indices with high matches:', indices)
@@ -67,13 +69,13 @@ def decrypt(ciphertext):
 
     # Find the probabilities associated with each subsampled key (every
     # key_length items, modulo key_length)
-    key_probabilites = [letter_prob(ciphernums[shift::key_length]) for shift
+    key_probabilities = [letter_prob(ciphernums[shift::key_length]) for shift
             in range(key_length)]
 
     # Actually construct the key, based on probability dot product with
     # Engilsh language letter frequency
     key_shifts = []
-    for prob in key_probabilites:
+    for prob in key_probabilities:
         max_prob = 0
         max_index = 0
         for i in range(26):
