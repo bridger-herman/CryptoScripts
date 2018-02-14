@@ -18,3 +18,14 @@ def modinv(a, m):
         raise Exception('modular inverse does not exist')
     else:
         return x % m
+
+def gcd2(a, b):
+    if a < b:
+        a, b = b, a
+    while b > 0:
+        t = b
+        q = a//b
+        b = a%b
+        print('{} = {}*{} + {}'.format(a, q, t, b))
+        a = t
+    return a
