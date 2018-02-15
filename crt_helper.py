@@ -1,4 +1,5 @@
 import sys
+import debug
 
 def main():
     if len(sys.argv) < 5:

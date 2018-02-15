@@ -5,7 +5,6 @@ from debug import *
 
 # TODO make this https://stackoverflow.com/a/9758173
 def egcd(a, b):
-    dbprint('euclidean', a, b)
     if a == 0:
         return (b, 0, 1)
     else:
