@@ -4,17 +4,22 @@
 import sys
 sys.path.append('..')
 from euclid import modinv
+from debug import *
 
 
 def encrypt(plaintext, a, k):
     plaintext_nums = list(map(lambda l: ord(l) - 97, filter(lambda l:
         l.isalpha(), plaintext.strip().lower())))
+    dbprint('plaintext:', plaintext_nums)
     encrypted = [(num*a + k)%26 for num in plaintext_nums]
+    dbprint('encrypted:', encrypted)
+
     return ''.join(map(lambda n: chr(n + 65), encrypted))
 
 def decrypt(ciphertext, a=None, k=None):
     ciphertext_nums = list(map(lambda l: ord(l) - 65, filter(lambda l:
         l.isalpha(), ciphertext.strip().upper())))
+    dbprint('ciphertext:', ciphertext_nums)
     if a is None and k is None:
         i = 0
         # Have inverses mod 26
@@ -33,6 +38,7 @@ def decrypt(ciphertext, a=None, k=None):
                     i = 0
     else:
         decrypted = [(modinv(a, 26)*(num - k))%26 for num in ciphertext_nums]
+        dbprint('decrypted:', decrypted)
         return ''.join(map(lambda n: chr(n + 97), decrypted))
 
 def main():
