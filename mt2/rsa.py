@@ -17,6 +17,10 @@ def encrypt(msg, n, e):
     m = int(msg_nums)
     return pow(m, e, n)
 
+def alpha_to_num(msg):
+    msg_clean = list(filter(lambda l: l.isalpha(), msg.strip().lower()))
+    return int(''.join(map(lambda l: format(ord(l) - 96, '02'), msg_clean)))
+
 def num_to_alpha(n):
     s = str(n)
     if len(s) % 2 != 0:
@@ -24,8 +28,7 @@ def num_to_alpha(n):
     digits = []
     for i in range(0, len(s), 2):
         digits.append(s[i:i+2])
-    print(digits)
-
+    return ''.join(map(lambda d: chr(int(d) + 96), digits))
 
 def main():
     if len(sys.argv) != 4:
