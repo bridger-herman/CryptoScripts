@@ -5,7 +5,7 @@
 def exp(x, e):
     y = 1
     while e != 0:
-        print('{: 8} & {: 8} & {: 8} \\\\'.format(x, e, y))
+        #  print('{: 8} & {: 8} & {: 8} \\\\'.format(x, e, y))
         if e % 2 != 0:
             y = x*y
             e = e - 1
@@ -17,13 +17,13 @@ def exp(x, e):
 def modexp(x, e, m):
     y = 1
     while e != 0:
-        print('{: 8} & {: 8} & {: 8} \\\\'.format(x, e, y))
+        #  print('{: 8} & {: 8} & {: 8} \\\\'.format(x, e, y))
         if e % 2 != 0:
             y = (x*y) % m
             e = e - 1
         else:
             x = (x*x) % m
             e = e//2
-    print('{: 8} & {: 8} & {: 8} \\\\'.format(x, e, y))
+    #  print('{: 8} & {: 8} & {: 8} \\\\'.format(x, e, y))
     return y
 
