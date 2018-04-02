@@ -3,6 +3,19 @@ sys.path.append('../mt1')
 from fastexp import modexp, exp
 from math import log2
 
+# Copied from here https://stackoverflow.com/a/17377939
+# Could've done this myself but ran out of time
+def sieve(n):
+    if n == 2:
+        return True
+    if n % 2 == 0 or n <= 1:
+        return False
+    sqr = int(n**0.5) + 1
+    for divisor in range(3, sqr, 2):
+        if n % divisor == 0:
+            return False
+    return True
+
 def fermat(n):
     for x in range(1, n):
         a = modexp(x, n - 1, n)
@@ -11,6 +24,17 @@ def fermat(n):
             return False
         else:
             print('Pseudoprime, base', x)
+    return True
+
+def fermat2(n):
+    pseudos = []
+    for x in range(1, n):
+        a = modexp(x, n - 1, n)
+        if a != 1:
+            return (False, None)
+        else:
+            pseudos.append(x)
+    return (True, pseudos)
 
 def strong_pseudo(b, n):
     for m in range(1, n):
