@@ -49,3 +49,12 @@ def strong_pseudo(b, n):
                     print('(condition 1)')
                 if e == -1:
                     print('(condition 2)')
+
+# Trial division of n
+def trial_div(n):
+    for k in range(3, int(n**0.5) + 1):
+        print(k)
+        if k % n == 0:
+            return True
+    return False
+
