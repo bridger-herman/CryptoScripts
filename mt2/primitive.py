@@ -12,6 +12,7 @@ def factor(n):
             #  if i % d == 0:
     return factors
 
+# is x primitive modulo p
 def is_primitive(x, p):
     for q in factor(p - 1):
         if len(factor(q)) == 0:
