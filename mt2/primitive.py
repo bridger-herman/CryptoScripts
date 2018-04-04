@@ -2,15 +2,7 @@
 # Bridger Herman
 # March 2018
 
-def factor(n):
-    non_divisors = []
-    factors = []
-    for i in range(2, n):
-        if n % i == 0:
-            factors.append(i)
-        #  for d in non_divisors:
-            #  if i % d == 0:
-    return factors
+from factor import factor
 
 # is x primitive modulo p
 def is_primitive(x, p):
