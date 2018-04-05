@@ -12,13 +12,17 @@ def disc_log(a, b, p):
     print('m =', m)
     pairs = []
     for j in range(m):
-        pairs.append((j, modexp(a, j, p)))
+        g = modexp(a, j, p)
+        print('giant step a^j: {}^{} = {}'.format(a, j, g))
+        pairs.append((j, g))
     am = modexp(modinv(a, p), m, p) # a^(-m) mod p -> (a^(-1))^m mod p
     print('a^{-m} =', am)
     ajs = (list(zip(*pairs))[1])
     y = b
     for i in range(m):
+        s = (y*am) % p
+        print('baby step y*am: {}*{} = {}'.format(y, am, s))
         if y in ajs:
             return i*m + pairs[ajs.index(y)][0] # i*m + j
         else:
-            y = (y*am) % p
+            y = s
