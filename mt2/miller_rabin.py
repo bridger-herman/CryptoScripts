@@ -35,6 +35,10 @@ def miller_rabin(n, x=None):
 
     # Compute M-R sequence (last term first)
     mr_sequence = (exp(x, (n-1)/(1<<i)) for i in range(k))
+    print('M-R sequence:')
+    for i, term in enumerate(mr_sequence):
+        print('  x^((n-1)/(2^i)) = {}^(({}-1)/(2^{})) = {}'.format(x, n, i,
+            term%n))
     for term in mr_sequence:
         m = term % n
         if m != 1 and m != -1:
