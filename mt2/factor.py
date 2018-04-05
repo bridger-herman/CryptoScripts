@@ -26,3 +26,6 @@ def sieve(n):
         if n % divisor == 0:
             return False
     return True
+
+def prime_factors(n):
+    return list(filter(lambda f: sieve(f), factor(n)))
