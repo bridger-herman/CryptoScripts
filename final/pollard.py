@@ -5,6 +5,21 @@
 import sys
 sys.path.append('../mt1')
 from euclid import egcd
+from math import log
+
+def b_primes(b):
+    primes = []
+    with open('./10000_primes.csv') as fin:
+        for line in fin:
+            line = [int(p) for p in line.strip().split(',')]
+            if max(line) <= b:
+                primes.extend(line)
+            else:
+                up_to_max = [p for p in line if p <= b]
+                primes.extend(up_to_max)
+                break
+    return primes
+
 
 def pollard_rho(n):
     x = 2
@@ -12,7 +27,7 @@ def pollard_rho(n):
     g = 1
     f = lambda x: (pow(x, 2, n) + 1)%n
     while g == 1:
-        print(g, x, y)
+        #  print(g, x, y)
         x = f(x)
         y = f(f(y))
         g, _, _ = egcd(abs(x - y), n)
@@ -20,3 +35,23 @@ def pollard_rho(n):
         return None
     else:
         return g
+
+def pollard_p_1(n, bound=2):
+    primes = b_primes(bound)
+    t = len(primes)
+    b = 2
+    g, _, _ = egcd(b, n)
+    if g >= 2:
+        return g
+    for i in range(t):
+        l = int(log(n)/log(primes[i]))
+        r = pow(primes[i], l)
+        b = pow(b, r, n)
+        g, _, _ = egcd(b - 1, n)
+        print(g, l, b)
+        if 1 < g and g < n:
+            return g
+        elif g == 1:
+            continue
+        elif g == n:
+            return None
