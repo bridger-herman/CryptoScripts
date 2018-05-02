@@ -26,11 +26,14 @@ def pollard_rho(n):
     y = 2
     g = 1
     f = lambda x: (pow(x, 2, n) + 1)%n
+    steps = 0
     while g == 1:
         #  print(g, x, y)
         x = f(x)
         y = f(f(y))
         g, _, _ = egcd(abs(x - y), n)
+        steps += 1
+    print(steps, 'steps')
     if g == n:
         return None
     else:
@@ -43,15 +46,19 @@ def pollard_p_1(n, bound=2):
     g, _, _ = egcd(b, n)
     if g >= 2:
         return g
+    steps = 0
     for i in range(t):
         l = int(log(n)/log(primes[i]))
         r = pow(primes[i], l)
         b = pow(b, r, n)
         g, _, _ = egcd(b - 1, n)
         #  print(g, l, b)
+        steps += 1
         if 1 < g and g < n:
+            print(steps, 'steps')
             return g
         elif g == 1:
             continue
         elif g == n:
+            print(steps, 'steps')
             return None
