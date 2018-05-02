@@ -48,7 +48,7 @@ def pollard_p_1(n, bound=2):
         r = pow(primes[i], l)
         b = pow(b, r, n)
         g, _, _ = egcd(b - 1, n)
-        print(g, l, b)
+        #  print(g, l, b)
         if 1 < g and g < n:
             return g
         elif g == 1:
